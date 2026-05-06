@@ -64,6 +64,13 @@
   </div>
   <div class="sep"><div class="sep-line"></div><div class="sep-sym">✦ ◈ ✦</div><div class="sep-line"></div></div>
   <div class="f-group"><label class="f-label">Ton prénom</label><input id="f-prenom" placeholder="Ton prénom…"></div>
+  <div class="f-group">
+    <label class="f-label">Tu t'identifies comme</label>
+    <div class="pills" id="p-genre">
+      <button class="pill" data-v="une femme">Une femme</button>
+      <button class="pill" data-v="un homme">Un homme</button>
+    </div>
+  </div>
   <div class="f-group"><label class="f-label">Le parfum que tu portes</label><input id="f-parfum" placeholder="Ex : La Vie est Belle, Angel, Santal 33…"></div>
   <div class="f-group"><label class="f-label">Depuis combien de temps ?</label><div class="pills" id="p-duree"></div></div>
   <div class="f-group"><label class="f-label">Comment tu te sens quand tu le portes ?</label><div class="pills" id="p-ressenti"></div></div>
@@ -104,11 +111,19 @@
 <script>
 const PILLS={
   "p-duree":["Quelques jours","Quelques semaines","Plusieurs mois","Des années","Occasionnellement"],
-  "p-ressenti":["Protégée","Puissante","Légère et libre","Séduisante","Sereine","Nostalgique","Je ne sais pas"],
+  "p-ressenti":["Protégée·é","Puissante·t","Légère·er et libre","Séduisante·t","Sereine·n","Nostalgique","Je ne sais pas"],
   "p-energie":["En transformation","En reconstruction","En élan créatif","Dans une pause"],
   "p-defi":["Amour","Argent","Carrière","Confiance","Corps","Famille"],
   "p-intention":["Paix","Abondance","Amour","Clarté","Puissance","Ancrage","Liberté","Reconnaissance"]
 };
+
+// Pills genre (mono, gérées séparément)
+document.getElementById('p-genre').querySelectorAll('.pill').forEach(pill=>{
+  pill.addEventListener('click',()=>{
+    document.getElementById('p-genre').querySelectorAll('.pill').forEach(p=>p.classList.remove('on'));
+    pill.classList.add('on');
+  });
+});
 
 Object.entries(PILLS).forEach(([id,vals])=>{
   const c=document.getElementById(id);
@@ -131,8 +146,9 @@ function show(id){['pg-form','pg-loading','pg-result'].forEach(p=>{const el=docu
 const MSGS=["Le pendule lit ton énergie…","Identification de tes fréquences…","Lecture de ta signature olfactive…","Canalisation de ton message…","Rédaction de ta guidance…"];
 
 async function analyser(){
-  const prenom=document.getElementById('f-prenom').value.trim()||'Chère cliente';
+  const prenom=document.getElementById('f-prenom').value.trim()||'Cher·e client·e';
   const parfum=document.getElementById('f-parfum').value.trim();
+  const genre=getV('p-genre')||'une personne';
   if(!parfum){alert('Dis-moi quel parfum tu portes 🌺');return;}
   show('pg-loading');
   let mi=0;
@@ -140,12 +156,13 @@ async function analyser(){
 
   const prompt=`Tu es NOSSANE COULIBALY, radiesthésiste chez TANIKA PARFUMS. Le parfum qu'une personne choisit est le miroir de son âme.
 
-Cliente : ${prenom} · Parfum : ${parfum} · Depuis : ${getV('p-duree')||'?'} · Ressenti : ${getV('p-ressenti')||'?'} · Énergie : ${getV('p-energie')||'?'} · Défi : ${getV('p-defi')||'?'} · Intentions : ${getM('p-intention')||'?'} · Notes : ${document.getElementById('f-notes').value||'?'}
+La personne s'identifie comme : ${genre}
+Prénom : ${prenom} · Parfum : ${parfum} · Depuis : ${getV('p-duree')||'?'} · Ressenti : ${getV('p-ressenti')||'?'} · Énergie : ${getV('p-energie')||'?'} · Défi : ${getV('p-defi')||'?'} · Intentions : ${getM('p-intention')||'?'} · Notes : ${document.getElementById('f-notes').value||'?'}
 
-Fais une lecture DIVINATOIRE et ÉNERGÉTIQUE profonde basée sur le parfum comme révélateur de l'âme. Révèle ses blessures cachées, forces, blocages, ce qu'elle traverse. Sois précise, surprenante, prophétique. Vouvoiement.
+Fais une lecture DIVINATOIRE et ÉNERGÉTIQUE profonde basée sur le parfum comme révélateur de l'âme. Révèle ses blessures cachées, forces, blocages, ce qu'elle/il traverse. Adapte le genre et les pronoms selon l'identité de la personne. Sois précis·e, surprenant·e, prophétique. Vouvoiement universel.
 
 JSON uniquement sans markdown :
-{"profil":"Titre divinatoire 3-4 mots","sous_titre":"Ce que ce parfum révèle en une phrase","energie":"3-4 phrases sur son état énergétique profond","vecu":"2-3 phrases sur ce qu'elle traverse","prediction":"2-3 phrases divinatoires sur ce qui l'attend","liberation":"2-3 phrases sur le blocage à dissoudre","message":"Message canalisé 4-6 phrases en vouvoyant"}`;
+{"profil":"Titre divinatoire 3-4 mots","sous_titre":"Ce que ce parfum révèle en une phrase","energie":"3-4 phrases sur son état énergétique profond","vecu":"2-3 phrases sur ce qu'elle/il traverse","prediction":"2-3 phrases divinatoires sur ce qui l'attend","liberation":"2-3 phrases sur le blocage à dissoudre","message":"Message canalisé 4-6 phrases en vouvoiement universel"}`;
 
   try{
     const r=await fetch('/api/analyse',{
