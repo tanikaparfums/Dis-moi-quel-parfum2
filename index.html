@@ -73,8 +73,8 @@
   </div>
   <div class="f-group"><label class="f-label">Le parfum que tu portes</label><input id="f-parfum" placeholder="Ex : La Vie est Belle, Angel, Santal 33…"></div>
   <div class="f-group"><label class="f-label">Depuis combien de temps ?</label><div class="pills" id="p-duree"></div></div>
-  <div class="f-group"><label class="f-label">Comment tu te sens quand tu le portes ?</label><div class="pills" id="p-ressenti"></div></div>
-  <div class="f-group"><label class="f-label">Ton énergie en ce moment</label><div class="pills" id="p-energie"></div></div>
+  <div class="f-group"><label class="f-label">Comment tu te sens quand tu le portes ? <span style="font-weight:300;font-style:italic;letter-spacing:0;text-transform:none;">(plusieurs choix)</span></label><div class="pills multi" id="p-ressenti"></div></div>
+  <div class="f-group"><label class="f-label">Ton énergie en ce moment <span style="font-weight:300;font-style:italic;letter-spacing:0;text-transform:none;">(plusieurs choix)</span></label><div class="pills multi" id="p-energie"></div></div>
   <div class="f-group"><label class="f-label">Ton défi principal</label><div class="pills" id="p-defi"></div></div>
   <div class="f-group"><label class="f-label">Ce que tu cherches à attirer <span style="font-weight:300;font-style:italic;letter-spacing:0;text-transform:none;">(plusieurs choix)</span></label><div class="pills multi" id="p-intention"></div></div>
   <div class="f-group"><label class="f-label">Notes aimées ou refusées ?</label><textarea id="f-notes" placeholder="Ex : j'adore la vanille, je ne supporte pas les muscs…"></textarea></div>
@@ -112,7 +112,7 @@
 const PILLS={
   "p-duree":["Quelques jours","Quelques semaines","Plusieurs mois","Des années","Occasionnellement"],
   "p-ressenti":["Protégée·é","Puissante·t","Légère·er et libre","Séduisante·t","Sereine·n","Nostalgique","Je ne sais pas"],
-  "p-energie":["En transformation","En reconstruction","En élan créatif","Dans une pause"],
+  "p-energie":["En transformation","En expansion","En reconstruction","En élan créatif","En alignement","En renouveau","Dans une pause","En amour","En transition","Solaire","Mystique","Fluide","Audacieuse","Visionnaire","Lumineuse","Divine","Sensuelle","Sensible","Dispersée","Surchargée","En remise en question","En manque d'énergie","Coincée","Déphasée"],
   "p-defi":["Amour","Argent","Carrière","Confiance","Corps","Famille"],
   "p-intention":["Paix","Abondance","Amour","Clarté","Puissance","Ancrage","Liberté","Reconnaissance"]
 };
@@ -157,12 +157,12 @@ async function analyser(){
   const prompt=`Tu es NOSSANE COULIBALY, radiesthésiste chez TANIKA PARFUMS. Le parfum qu'une personne choisit est le miroir de son âme.
 
 La personne s'identifie comme : ${genre}
-Prénom : ${prenom} · Parfum : ${parfum} · Depuis : ${getV('p-duree')||'?'} · Ressenti : ${getV('p-ressenti')||'?'} · Énergie : ${getV('p-energie')||'?'} · Défi : ${getV('p-defi')||'?'} · Intentions : ${getM('p-intention')||'?'} · Notes : ${document.getElementById('f-notes').value||'?'}
+Prénom : ${prenom} · Parfum : ${parfum} · Depuis : ${getV('p-duree')||'?'} · Ressenti : ${getV('p-ressenti')||'?'} · Énergie : ${getM('p-energie')||'?'} · Défi : ${getV('p-defi')||'?'} · Intentions : ${getM('p-intention')||'?'} · Notes : ${document.getElementById('f-notes').value||'?'}
 
 Fais une lecture DIVINATOIRE et ÉNERGÉTIQUE profonde basée sur le parfum comme révélateur de l'âme. Révèle ses blessures cachées, forces, blocages, ce qu'elle/il traverse. Adapte le genre et les pronoms selon l'identité de la personne. Sois précis·e, surprenant·e, prophétique. Vouvoiement universel.
 
 JSON uniquement sans markdown :
-{"profil":"Titre divinatoire 3-4 mots","sous_titre":"Ce que ce parfum révèle en une phrase","energie":"3-4 phrases sur son état énergétique profond","vecu":"2-3 phrases sur ce qu'elle/il traverse","prediction":"2-3 phrases divinatoires sur ce qui l'attend","liberation":"2-3 phrases sur le blocage à dissoudre","message":"Message canalisé 4-6 phrases en vouvoiement universel"}`;
+{"profil":"Titre divinatoire 3-4 mots","sous_titre":"Ce que ce parfum révèle en une phrase","energie":"3-4 phrases sur son état énergétique profond","vecu":"2-3 phrases sur ce qu'elle/il traverse","prediction":"2-3 phrases divinatoires sur ce qui l'attend","liberation":"2-3 phrases sur le blocage à dissoudre","note":"UNE seule note olfactive recommandée (nom + comment elle agit sur son énergie en 2 phrases)","message":"Message canalisé 4-6 phrases en vouvoiement universel"}`;
 
   try{
     const r=await fetch('/api/analyse',{
@@ -190,7 +190,16 @@ JSON uniquement sans markdown :
       <div class="sep"><div class="sep-line"></div><div class="sep-sym">◈</div><div class="sep-line"></div></div>
       <div class="r-section"><div class="r-label">IV · Libération Vibratoire</div><div class="r-title">Ce qui demande à être dissous</div><div class="r-text">${j.liberation}</div></div>
       <div class="sep"><div class="sep-line"></div><div class="sep-sym">◈</div><div class="sep-line"></div></div>
-      <div class="r-section"><div class="r-label">V · Message Canalisé</div><div class="r-title">Pour Toi</div>
+      <div class="r-section"><div class="r-label">V · Ta Note Vibratoire</div><div class="r-title">L'Essence qui te correspond</div><div class="r-text">${j.note}</div>
+      <div style="margin-top:18px;padding:18px 20px;background:rgba(184,146,42,0.08);border:1px solid rgba(184,146,42,0.2);">
+        <div style="font-size:0.6rem;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--or);margin-bottom:10px;">✦ Pour aller plus loin</div>
+        <p style="font-size:0.82rem;font-weight:300;color:var(--gris);line-height:1.8;margin-bottom:14px;font-family:'Cormorant Garamond',serif;font-style:italic;">Tu veux découvrir le parfum du marché qui correspond exactement à ton énergie — ou créer ta propre fragrance sur mesure ?</p>
+        <a href="https://tanikaparfums.fr/products/scan-energetique" style="display:block;width:100%;padding:12px;background:var(--encre);color:#faf7f2;text-decoration:none;font-size:0.65rem;font-weight:500;letter-spacing:3px;text-transform:uppercase;font-family:'Jost',sans-serif;text-align:center;margin-bottom:8px;box-sizing:border-box;" target="_blank">Découvrir mon parfum du marché · 29,99 € →</a>
+        <a href="https://tanikaparfums.fr/products/scan-parfum-30-ml" style="display:block;width:100%;padding:12px;background:transparent;color:var(--or);border:1px solid var(--or);text-decoration:none;font-size:0.65rem;font-weight:500;letter-spacing:3px;text-transform:uppercase;font-family:'Jost',sans-serif;text-align:center;box-sizing:border-box;" target="_blank">Créer mon parfum sur mesure · 58,88 € →</a>
+      </div>
+      </div>
+      <div class="sep"><div class="sep-line"></div><div class="sep-sym">◈</div><div class="sep-line"></div></div>
+      <div class="r-section"><div class="r-label">VI · Message Canalisé</div><div class="r-title">Pour Toi</div>
       <div class="citation"><div class="citation-text">${j.message}</div><div class="citation-by">NOSSANE · TANIKA PARFUMS</div></div></div>
     `;
     show('pg-result');
