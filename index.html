@@ -162,7 +162,7 @@ Prénom : ${prenom} · Parfum : ${parfum} · Depuis : ${getV('p-duree')||'?'} ·
 Fais une lecture DIVINATOIRE et ÉNERGÉTIQUE profonde basée sur le parfum comme révélateur de l'âme. Révèle ses blessures cachées, forces, blocages, ce qu'elle/il traverse. Adapte le genre et les pronoms selon l'identité de la personne. Sois précis·e, surprenant·e, prophétique. Vouvoiement universel.
 
 JSON uniquement sans markdown :
-{"profil":"Titre divinatoire 3-4 mots","sous_titre":"Ce que ce parfum révèle en une phrase","energie":"3-4 phrases sur son état énergétique profond","vecu":"2-3 phrases sur ce qu'elle/il traverse","prediction":"2-3 phrases divinatoires sur ce qui l'attend","liberation":"2-3 phrases sur le blocage à dissoudre","note":"Choisis UNE ou DEUX notes olfactives précises (pas une famille, pas les notes du parfum porté) parmi tout le monde des essences — choisies UNIQUEMENT en fonction de l énergie de la personne à l instant T, pour soutenir son évolution ou transmuter son état vers son expansion. Nomme chaque note précisément puis explique en 3-4 phrases : sa vertu énergétique profonde et quel rôle concret elle va jouer dans sa vie en ce moment","message":"Message canalisé 4-6 phrases en vouvoiement universel"}`;
+{"profil":"Titre divinatoire 3-4 mots","sous_titre":"Ce que ce parfum révèle en une phrase","energie":"3-4 phrases sur son état énergétique profond","vecu":"2-3 phrases sur ce qu'elle/il traverse","prediction":"2-3 phrases divinatoires sur ce qui l'attend","liberation":"2-3 phrases sur le blocage à dissoudre","note":"IMPORTANT: valeur en STRING simple uniquement. Commence directement par le nom de la note (ex: Le Vétiver.) puis continue en texte continu : vertu énergétique et rôle dans sa vie en ce moment. Basé sur son énergie à l instant T pas sur les notes de son parfum. 3-4 phrases max.","message":"Message canalisé 4-6 phrases en vouvoiement universel"}`;
 
   try{
     const r=await fetch('/api/analyse',{
@@ -190,7 +190,7 @@ JSON uniquement sans markdown :
       <div class="sep"><div class="sep-line"></div><div class="sep-sym">◈</div><div class="sep-line"></div></div>
       <div class="r-section"><div class="r-label">IV · Libération Vibratoire</div><div class="r-title">Ce qui demande à être dissous</div><div class="r-text">${j.liberation}</div></div>
       <div class="sep"><div class="sep-line"></div><div class="sep-sym">◈</div><div class="sep-line"></div></div>
-      <div class="r-section"><div class="r-label">V · Ta Note Vibratoire</div><div class="r-title">L'Essence qui te correspond</div><div class="r-text">${j.note}</div>
+      <div class="r-section"><div class="r-label">V · Ta Note Vibratoire</div><div class="r-title">L'Essence qui te correspond</div><div class="r-text">${typeof j.note === 'object' ? Object.values(j.note).join(' ') : j.note}</div>
       <div style="margin-top:18px;padding:18px 20px;background:rgba(184,146,42,0.08);border:1px solid rgba(184,146,42,0.2);">
         <div style="font-size:0.6rem;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--or);margin-bottom:10px;">✦ Pour aller plus loin</div>
         <p style="font-size:0.82rem;font-weight:300;color:var(--gris);line-height:1.8;margin-bottom:14px;font-family:'Cormorant Garamond',serif;font-style:italic;">Tu veux découvrir le parfum du marché qui correspond exactement à ton énergie — ou créer ta propre fragrance sur mesure ?</p>
