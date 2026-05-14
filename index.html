@@ -98,9 +98,10 @@
   </div>
   <div id="r-body"></div>
   <div style="text-align:center;margin-top:36px;padding-top:24px;border-top:1px solid var(--bord-f);">
+    <button onclick="telechargerPDF()" style="display:block;width:100%;padding:15px;background:var(--or);color:#faf7f2;border:none;cursor:pointer;font-family:'Jost',sans-serif;font-size:0.7rem;font-weight:500;letter-spacing:4px;text-transform:uppercase;margin-bottom:16px;">✦ Télécharger mon analyse PDF</button>
     <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;color:var(--encre);margin-bottom:16px;line-height:1.6;">"Ton parfum t'a révélée —<br>maintenant laisse-moi te créer le tien"</div>
-    <a href="https://tanikaparfums.fr/products/scan-parfum-30-ml" class="btn" target="_blank">Créer mon parfum sur mesure ✦</a>
-    <a href="https://tanikaparfums.fr/products/seance-guidance-vibratoire-visio" class="btn-out" target="_blank">Réserver une séance visio →</a>
+    <a href="https://tanikaparfums.fr/products/scan-energetique" class="btn" target="_blank">Découvrir mon parfum du marché · 29,99 € ✦</a>
+    <a href="https://tanikaparfums.fr/products/scan-parfum-30-ml" class="btn-out" target="_blank">Créer mon parfum sur mesure · 58,88 € →</a>
   </div>
   <div class="footer">
     <div class="footer-brand">TANIKA PARFUMS</div>
@@ -207,6 +208,42 @@ JSON uniquement sans markdown :
     clearInterval(mt);
     document.getElementById('r-body').innerHTML='<p style="text-align:center;color:var(--gris);padding:40px;">Une erreur s\'est produite. Veuillez réessayer 🙏</p>';
     show('pg-result');
+  }
+}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+async function telechargerPDF() {
+  const btn = document.querySelector('button[onclick="telechargerPDF()"]');
+  btn.textContent = '⏳ Génération en cours…';
+  btn.disabled = true;
+  try {
+    const { jsPDF } = window.jspdf;
+    const element = document.getElementById('pg-result');
+    const canvas = await html2canvas(element, { scale:2, useCORS:true, backgroundColor:'#faf7f2' });
+    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+    const pdf = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const imgHeight = (canvas.height * pageWidth) / canvas.width;
+    let y = 0;
+    let remaining = imgHeight;
+    while (remaining > 0) {
+      pdf.addImage(imgData, 'JPEG', 0, y, pageWidth, imgHeight);
+      remaining -= pageHeight;
+      y -= pageHeight;
+      if (remaining > 0) pdf.addPage();
+    }
+    const prenom = document.getElementById('r-name') ? document.getElementById('r-name').textContent.toLowerCase() : 'analyse';
+    pdf.save(`analyse-vibratoire-${prenom}-tanika.pdf`);
+    btn.textContent = '✦ Télécharger mon analyse PDF';
+    btn.disabled = false;
+  } catch(e) {
+    btn.textContent = '✦ Télécharger mon analyse PDF';
+    btn.disabled = false;
+    alert('Erreur lors de la génération 🙏');
   }
 }
 </script>
