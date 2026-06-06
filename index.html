@@ -53,7 +53,7 @@
 </style>
 </head>
 <body>
-
+ 
 <div class="page active" id="pg-form">
   <div class="hero">
     <span class="brand-lbl">TANIKA PARFUMS · Guidance Olfactive</span>
@@ -81,13 +81,13 @@
   <button class="btn" onclick="analyser()">✦ Révèle mon énergie</button>
   <p style="text-align:center;font-size:.72rem;color:var(--gris);opacity:.5;margin-top:10px;font-style:italic;">Analyse divinatoire générée instantanément</p>
 </div>
-
+ 
 <div class="page" id="pg-loading" style="text-align:center;padding-top:100px;">
   <div class="loader"></div>
   <div id="load-msg" style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;color:var(--gris);">Le pendule lit ton énergie…</div>
   <div style="font-size:.65rem;letter-spacing:4px;text-transform:uppercase;color:rgba(184,146,42,.35);margin-top:10px;">Analyse vibratoire en cours</div>
 </div>
-
+ 
 <div class="page" id="pg-result">
   <div class="r-header">
     <span class="brand-lbl">TANIKA PARFUMS · Guidance Olfactive</span>
@@ -108,7 +108,7 @@
     <div class="footer-sub">by NOSSANE COULIBALY · Guidance Olfactive</div>
   </div>
 </div>
-
+ 
 <script>
 const PILLS={
   "p-duree":["Quelques jours","Quelques semaines","Plusieurs mois","Des années","Occasionnellement"],
@@ -117,7 +117,7 @@ const PILLS={
   "p-defi":["Amour","Argent","Carrière","Confiance","Corps","Famille"],
   "p-intention":["Paix","Abondance","Amour","Clarté","Puissance","Ancrage","Liberté","Reconnaissance"]
 };
-
+ 
 // Pills genre (mono, gérées séparément)
 document.getElementById('p-genre').querySelectorAll('.pill').forEach(pill=>{
   pill.addEventListener('click',()=>{
@@ -125,7 +125,7 @@ document.getElementById('p-genre').querySelectorAll('.pill').forEach(pill=>{
     pill.classList.add('on');
   });
 });
-
+ 
 Object.entries(PILLS).forEach(([id,vals])=>{
   const c=document.getElementById(id);
   const multi=c.classList.contains('multi');
@@ -139,13 +139,13 @@ Object.entries(PILLS).forEach(([id,vals])=>{
     c.appendChild(b);
   });
 });
-
+ 
 function getV(id){const a=document.querySelector('#'+id+' .pill.on');return a?a.dataset.v:'';}
 function getM(id){return[...document.querySelectorAll('#'+id+' .pill.on')].map(p=>p.dataset.v).join(', ');}
 function show(id){['pg-form','pg-loading','pg-result'].forEach(p=>{const el=document.getElementById(p);el.style.display=p===id?'block':'none';el.classList.toggle('active',p===id);});window.scrollTo(0,0);}
-
+ 
 const MSGS=["Lecture de ton énergie vibratoire…","Analyse de ta signature olfactive…","Identification de tes fréquences…","Canalisation de ta guidance…","Rédaction de ton analyse personnalisée…"];
-
+ 
 async function analyser(){
   const prenom=document.getElementById('f-prenom').value.trim()||'Cher·e client·e';
   const parfum=document.getElementById('f-parfum').value.trim();
@@ -154,17 +154,17 @@ async function analyser(){
   show('pg-loading');
   let mi=0;
   const mt=setInterval(()=>{mi=(mi+1)%MSGS.length;const el=document.getElementById('load-msg');if(el)el.textContent=MSGS[mi];},2200);
-
+ 
   const prompt=`Tu es NOSSANE COULIBALY, radiesthésiste chez TANIKA PARFUMS. Le parfum qu'une personne choisit est le miroir de son âme.
-
+ 
 La personne s'identifie comme : ${genre}
 Prénom : ${prenom} · Parfum : ${parfum} · Depuis : ${getV('p-duree')||'?'} · Ressenti : ${getV('p-ressenti')||'?'} · Énergie : ${getM('p-energie')||'?'} · Défi : ${getV('p-defi')||'?'} · Intentions : ${getM('p-intention')||'?'} · Notes : ${document.getElementById('f-notes').value||'?'}
-
+ 
 Fais une lecture DIVINATOIRE et ÉNERGÉTIQUE profonde basée sur le parfum comme révélateur de l'âme. Révèle ses blessures cachées, forces, blocages, ce qu'elle/il traverse. Adapte le genre et les pronoms selon l'identité de la personne. Sois précis·e, surprenant·e, prophétique. Vouvoiement universel.
-
+ 
 JSON uniquement sans markdown :
-{"profil":"Titre divinatoire 3-4 mots","sous_titre":"Ce que ce parfum révèle en une phrase","energie":"3-4 phrases sur son état énergétique profond","vecu":"2-3 phrases sur ce qu'elle/il traverse","prediction":"2-3 phrases divinatoires sur ce qui l'attend","liberation":"2-3 phrases sur le blocage à dissoudre","note":"IMPORTANT: valeur en STRING simple uniquement. Commence directement par le nom de la note (ex: Le Vétiver.) puis continue en texte continu : vertu énergétique et rôle dans sa vie en ce moment. Basé sur son énergie à l instant T pas sur les notes de son parfum. 3-4 phrases max.","message":"Message canalisé 4-6 phrases en vouvoiement universel"}`;
-
+{"profil":"Titre divinatoire 3-4 mots","sous_titre":"Ce que ce parfum révèle en une phrase","energie":"3-4 phrases sur son état énergétique profond","vecu":"2-3 phrases sur ce qu'elle/il traverse","parfum_effet":"3-4 phrases sur ce que le parfum qu'elle/il porte fait concrètement à son énergie : ce qu'il lui apporte vibratoire ment (protection, amplification, ancrage...) ET ce qu'il pourrait potentiellement limiter ou drainer dans son énergie actuelle","prediction":"2-3 phrases divinatoires sur ce qui l'attend","liberation":"2-3 phrases sur le blocage à dissoudre","note":"IMPORTANT: valeur en STRING simple uniquement. Commence directement par le nom de la note (ex: Le Vétiver.) puis continue en texte continu : vertu énergétique et rôle dans sa vie en ce moment. Basé sur son énergie à l instant T pas sur les notes de son parfum. 3-4 phrases max.","message":"Message canalisé 4-6 phrases en vouvoiement universel"}`;
+ 
   try{
     const r=await fetch('/api/analyse',{
       method:'POST',
@@ -177,21 +177,23 @@ JSON uniquement sans markdown :
     const jm=txt.match(/\{[\s\S]*\}/);
     if(!jm)throw new Error('no json');
     const j=JSON.parse(jm[0]);
-
+ 
     document.getElementById('r-badge').textContent='✦ '+j.profil+' ✦';
     document.getElementById('r-name').textContent=prenom.toUpperCase();
     document.getElementById('r-tagline').textContent='"'+j.sous_titre+'"';
-
+ 
     document.getElementById('r-body').innerHTML=`
       <div class="r-section"><div class="r-label">I · Lecture Énergétique</div><div class="r-title">Ton Énergie du Moment</div><div class="r-text">${j.energie}</div></div>
       <div class="sep"><div class="sep-line"></div><div class="sep-sym">◈</div><div class="sep-line"></div></div>
       <div class="r-section"><div class="r-label">II · Ce que ton choix révèle</div><div class="r-title">Expériences & Présent</div><div class="r-text">${j.vecu}</div></div>
       <div class="sep"><div class="sep-line"></div><div class="sep-sym">◈</div><div class="sep-line"></div></div>
-      <div class="r-section"><div class="r-label">III · Vision Divinatoire</div><div class="r-title">Ce qui t'attend</div><div class="r-text">${j.prediction}</div></div>
+      <div class="r-section"><div class="r-label">III · Ce que ce parfum fait à ton énergie</div><div class="r-title">Ce qu'il t'apporte · Ce qu'il limite</div><div class="r-text">${j.parfum_effet}</div></div>
       <div class="sep"><div class="sep-line"></div><div class="sep-sym">◈</div><div class="sep-line"></div></div>
-      <div class="r-section"><div class="r-label">IV · Libération Vibratoire</div><div class="r-title">Ce qui demande à être dissous</div><div class="r-text">${j.liberation}</div></div>
+      <div class="r-section"><div class="r-label">IV · Vision Divinatoire</div><div class="r-title">Ce qui t'attend</div><div class="r-text">${j.prediction}</div></div>
       <div class="sep"><div class="sep-line"></div><div class="sep-sym">◈</div><div class="sep-line"></div></div>
-      <div class="r-section"><div class="r-label">V · Ta Note Vibratoire</div><div class="r-title">L'Essence qui te correspond</div><div class="r-text">${typeof j.note === 'object' ? Object.values(j.note).join(' ') : j.note}</div>
+      <div class="r-section"><div class="r-label">V · Libération Vibratoire</div><div class="r-title">Ce qui demande à être dissous</div><div class="r-text">${j.liberation}</div></div>
+      <div class="sep"><div class="sep-line"></div><div class="sep-sym">◈</div><div class="sep-line"></div></div>
+      <div class="r-section"><div class="r-label">VI · Ta Note Vibratoire</div><div class="r-title">L'Essence qui te correspond</div><div class="r-text">${typeof j.note === 'object' ? Object.values(j.note).join(' ') : j.note}</div>
       <div style="margin-top:18px;padding:18px 20px;background:rgba(184,146,42,0.08);border:1px solid rgba(184,146,42,0.2);">
         <div style="font-size:0.6rem;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--or);margin-bottom:10px;">✦ Pour aller plus loin</div>
         <p style="font-size:0.82rem;font-weight:300;color:var(--gris);line-height:1.8;margin-bottom:14px;font-family:'Cormorant Garamond',serif;font-style:italic;">Tu veux découvrir le parfum du marché qui correspond exactement à ton énergie — ou créer ta propre fragrance sur mesure ?</p>
@@ -200,7 +202,7 @@ JSON uniquement sans markdown :
       </div>
       </div>
       <div class="sep"><div class="sep-line"></div><div class="sep-sym">◈</div><div class="sep-line"></div></div>
-      <div class="r-section"><div class="r-label">VI · Message Canalisé</div><div class="r-title">Pour Toi</div>
+      <div class="r-section"><div class="r-label">VII · Message Canalisé</div><div class="r-title">Pour Toi</div>
       <div class="citation"><div class="citation-text">${j.message}</div><div class="citation-by">NOSSANE · TANIKA PARFUMS</div></div></div>
     `;
     show('pg-result');
@@ -211,7 +213,7 @@ JSON uniquement sans markdown :
   }
 }
 </script>
-
+ 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
